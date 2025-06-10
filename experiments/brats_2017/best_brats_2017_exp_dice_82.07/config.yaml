@@ -2,7 +2,7 @@
 # wandb parameters
 project: segfmr3d
 wandb_parameters:
-  entity: pcvlab
+  entity: imrozeshan-north-south-university
   group: brats2017
   name: segformer_scratch_2LayNormEncDec_complicatedAug
   mode: "online"
@@ -34,20 +34,20 @@ loss_fn:
 optimizer:
   optimizer_type: "adamw"
   optimizer_args:
-    lr: 0.0001
-    weight_decay: 0.01
+    lr: 0.0005  # Reduced from 0.001 to allow for better convergence over 100 epochs
+    weight_decay: 0.005  # Reduced from 0.01 to prevent over-regularization
 
 # schedulers
 warmup_scheduler:
   enabled: True # should be always true
-  warmup_epochs: 20
+  warmup_epochs: 10  # Reduced from 20 to 10 since we want faster warmup for 100 epochs
 
 train_scheduler:
   scheduler_type: 'cosine_annealing_wr'
   scheduler_args:
-    t_0_epochs: 400
+    t_0_epochs: 100  # Changed to match total epochs
     t_mult: 1
-    min_lr: 0.000006
+    min_lr: 0.000001  # Lowered minimum learning rate for better convergence over longer training
 
 # eponential moving average
 ema:
@@ -67,12 +67,12 @@ clip_gradients:
 # training hyperparameters
 training_parameters:
   seed: 42
-  num_epochs: 800
-  cutoff_epoch: 400
+  num_epochs: 100
+  cutoff_epoch: 90  # Increased to allow more training time before cutoff
   load_optimizer: False
-  print_every: 200
+  print_every: 100  # Reduced to get more frequent updates during training
   calculate_metrics: True
-  grad_accumulate_steps: 1 # default: 1
+  grad_accumulate_steps: 2  # Increased to help with stability during longer training
   checkpoint_save_dir: "model_checkpoints/best_dice_checkpoint"
   load_checkpoint: # not implemented yet
     load_full_checkpoint: False

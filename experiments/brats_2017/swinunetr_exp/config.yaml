@@ -1,0 +1,116 @@
+# Config File
+# wandb parameters
+project: swinunetr
+wandb_parameters:
+  entity: imrozeshan-north-south-university
+  group: brats2017
+  name: swinunetr_lightning
+  mode: "online"
+  resume: False
+
+# model parameters
+model_name: swinunetr
+model_parameters:
+    img_size: [64, 64, 64]
+    in_channels: 4
+    num_classes: 3
+    feature_size: 12
+    use_checkpoint: True
+    use_v2: True
+    downsample: "mergingv2"
+    depths: [2, 2, 2, 2]
+    num_heads: [3, 6, 12, 24]
+    drop_rate: 0.0
+    attn_drop_rate: 0.0
+    dropout_path_rate: 0.0
+    normalize: True
+    spatial_dims: 3
+
+# loss function
+loss_fn:
+  loss_type: "dice"
+  loss_args: 
+    smooth_nr: 0
+    smooth_dr: 1e-5
+    squared_pred: True
+    to_onehot_y: False
+    sigmoid: True
+
+# optimizer
+optimizer:
+  optimizer_type: "adamw"
+  optimizer_args:
+    lr: 0.0001
+    weight_decay: 0.00001
+
+# schedulers
+warmup_scheduler:
+  enabled: True
+  warmup_epochs: 10
+
+train_scheduler:
+  scheduler_type: 'cosine_annealing_wr'
+  scheduler_args:
+    t_0_epochs: 30
+    t_mult: 1
+    min_lr: 0.000001
+
+# eponential moving average
+ema:
+  enabled: False
+  ema_decay: 0.999
+  val_ema_every: 1
+
+sliding_window_inference:
+  sw_batch_size: 1
+  roi: [64, 64, 64]
+  overlap: 0.5
+
+# gradient clipping
+clip_gradients:
+  enabled: True
+  clip_gradients_value: 1.0
+
+# training hyperparameters
+training_parameters:
+  seed: 42
+  num_epochs: 30
+  cutoff_epoch: 25
+  load_optimizer: False
+  print_every: 100
+  calculate_metrics: True
+  grad_accumulate_steps: 1
+  checkpoint_save_dir: "model_checkpoints/best_dice_checkpoint"
+  load_checkpoint:
+    load_full_checkpoint: False
+    load_model_only: False
+    load_checkpoint_path: None
+
+# dataset args
+dataset_parameters:
+  dataset_type: "brats2017_seg"
+  train_dataset_args:
+    root: "../../../data/brats2017_seg"
+    train: True
+    fold_id: null
+
+  val_dataset_args:
+    root: "../../../data/brats2017_seg"
+    train: False
+    fold_id: null
+
+  train_dataloader_args:
+    batch_size: 1
+    shuffle: True
+    num_workers: 3
+    drop_last: True
+    pin_memory: True
+    persistent_workers: False
+
+  val_dataloader_args:
+    batch_size: 1
+    shuffle: False
+    num_workers: 3
+    drop_last: False
+    pin_memory: True
+    persistent_workers: False 

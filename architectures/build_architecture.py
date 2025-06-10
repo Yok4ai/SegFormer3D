@@ -7,9 +7,11 @@ we can use a keyword from the config file to build the model.
 def build_architecture(config):
     if config["model_name"] == "segformer3d":
         from .segformer3d import build_segformer3d_model
-
         model = build_segformer3d_model(config)
-
+        return model
+    elif config["model_name"] == "swinunetr":
+        from .swinunetr import build_swinunetr_model
+        model = build_swinunetr_model(config)
         return model
     else:
         return ValueError(

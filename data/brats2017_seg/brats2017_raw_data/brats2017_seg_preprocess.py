@@ -303,8 +303,8 @@ def viz(volume_indx: int = 1, label_indx: int = 1)->None:
 
 
 if __name__ == "__main__":
-    brats2017_task1_prep = Brats2017Task1Preprocess(root_dir="./",
-    	train_folder_name = "train",
+    brats2017_task1_prep = Brats2017Task1Preprocess(root_dir=".",
+        train_folder_name = "train",
         save_dir="../BraTS2017_Training_Data"
     )
     # run the preprocessing pipeline 
